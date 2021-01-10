@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7984718310485953966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7984718310485953964}
+  - component: {fileID: 7984718310485953965}
+  m_Layer: 0
+  m_Name: Level Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7984718310485953964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7984718310485953966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7984718310485953965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7984718310485953966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3d9e7cf0a340924284b85ca3ee7a3d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapIndex: 0
+  minHeight: 16
+  minWidth: 64
+  maxHeight: 64
+  maxWidth: 128
+  colorMappings:
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    prefab: {fileID: 5079508563122238632, guid: 17edb8a7ec063e24086465e8d1585f17, type: 3}
+  - color: {r: 1, g: 0, b: 0, a: 1}
+    prefab: {fileID: 5079508563122238632, guid: de80dbc9be40aa64a95b87f919e0925e, type: 3}
+  - color: {r: 0, g: 1, b: 0, a: 1}
+    prefab: {fileID: 5079508563122238632, guid: 241d2c6c07f4aac4d9d5edeba715c658, type: 3}
+  - color: {r: 0, g: 0, b: 1, a: 1}
+    prefab: {fileID: 5079508563122238632, guid: 89cc39304a9321c48b2429838e3237f7, type: 3}
+  - color: {r: 1, g: 0, b: 1, a: 1}
+    prefab: {fileID: 5079508563122238632, guid: 82c0ff57cb9b6a742b976adaa7c37557, type: 3}
+  - color: {r: 0, g: 1, b: 1, a: 1}
+    prefab: {fileID: 5079508563122238632, guid: 27d02ad8928a7e74bb56a8946583d54c, type: 3}
