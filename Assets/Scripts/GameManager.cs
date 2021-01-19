@@ -6,6 +6,22 @@ using UnityEngine.SceneManagement;
 [DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
+	#region Spawner
+	public static void Spawn(GameObject prefab, Vector3 position)
+	{
+		Instantiate(prefab, position, Quaternion.identity);
+	}
+
+	public static void Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
+	{
+		Instantiate(prefab, position, rotation);
+	}
+
+	public static void Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent) 
+	{
+		Instantiate(prefab, position, rotation, parent);
+	}
+	#endregion
 
 	#region Scene Management
 	public static void Restart()

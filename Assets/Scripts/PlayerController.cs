@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-	public float movementDelay = 1f;
+	//public float movementDelay = 1;
 
 	public LayerMask wallLayer;
 
-	public float delay;
+	bool isAxisInUse = false;
 
-	private void Start()
-	{
-		delay = movementDelay;
-	}
+	Vector3 movement;
+	Vector3 forwardDirection;
 
 	private void FixedUpdate()
 	{
@@ -22,43 +20,36 @@ public class PlayerController : MonoBehaviour
 
 	void Movement()
 	{
-		int horizontal = 0;
-		int vertical = 0;
-
 		//Inputs
-		Inputs(ref horizontal, ref vertical);
+		Vector2 movementAxis = InputManager.playerMovement;
+		movement = new Vector3(Mathf.RoundToInt(movementAxis.x), 0, Mathf.RoundToInt(movementAxis.y));
+		forwardDirection = transform.position + movement;
 
-		Vector3 movementDirection = new Vector3(horizontal, 0, vertical).normalized;
+		if (movement.x != 0 || movement.z != 0) //Button Pressed
+		{
+			if (isAxisInUse == false)
+			{
+				//Ignor if moving toward a wall
+				if (Physics.Raycast(transform.position, movement, 1, wallLayer)) return;
 
-		if (Physics.Raycast(transform.position, movementDirection, 1f, wallLayer)) return;
+				transform.LookAt(forwardDirection);
 
-		transform.position += movementDirection;
+				//Move
+				transform.position += movement;
 
-		delay = movementDelay;
+				isAxisInUse = true;
+			}
+		}
+		if (movement.x == 0 && movement.z == 0) //Not pressing anything
+		{
+			isAxisInUse = false;
+		}
 	}
 
-	void Inputs(ref int horizontal, ref int vertical)
+	private void OnDrawGizmos()
 	{
-		if (Input.GetKeyUp(KeyCode.A))
-		{
-			horizontal = -1;
-		}
-		else if (Input.GetKeyUp(KeyCode.D))
-		{
-			horizontal = 1;
-		}
-		else if (Input.GetKeyUp(KeyCode.S))
-		{
-			vertical = -1;
-		}
-		else if (Input.GetKeyUp(KeyCode.W))
-		{
-			vertical = 1;
-		}
-		else
-		{
-			horizontal = 0;
-			vertical = 0;
-		}
+		//Forward Direction representation
+		Gizmos.color = Color.green;
+		Gizmos.DrawLine(transform.position, forwardDirection);
 	}
 }

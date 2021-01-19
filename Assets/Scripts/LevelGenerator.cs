@@ -49,9 +49,9 @@ public class LevelGenerator : MonoBehaviour
 	{
 		//SelectMap(true, mapIndex);
 
-		currentMap = maps[mapIndex];
+		currentMap = maps[mapIndex]; //Selecting Map
 
-		for (int x = 0; x < currentMap.width; x++)
+		for (int x = 0; x < currentMap.width; x++) // Generating tiles
 		{
 			for (int y = 0; y < currentMap.height; y++)
 			{
@@ -59,7 +59,7 @@ public class LevelGenerator : MonoBehaviour
 			}
 		}
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++) //Keep track of all spawned walls
         {
             if (transform.GetChild(i).gameObject.layer == LayerMask.NameToLayer("Wall"))
                 objectPositions.Add(transform.GetChild(i).position);
@@ -88,7 +88,7 @@ public class LevelGenerator : MonoBehaviour
 
         if (pixelColor.a != 1 || pixelColor == Color.white) { return; }      //Ignore transparent or white pixels
 
-        foreach (ColorToPrefab colorMaping in colorMappings) 
+        foreach (ColorToPrefab colorMaping in colorMappings) //Choosing what to spawn
         {
             if (colorMaping.color.Equals(pixelColor))
             {
@@ -96,10 +96,10 @@ public class LevelGenerator : MonoBehaviour
                 Vector3 position = new Vector3(x, 0.5f, z);
 
                 if (colorMaping.prefab.layer == LayerMask.NameToLayer("Wall"))
-                    Instantiate(colorMaping.prefab, position, Quaternion.identity, transform);
+                    GameManager.Spawn(colorMaping.prefab, position, Quaternion.identity, transform);
 
                 else
-                    Instantiate(colorMaping.prefab, position, Quaternion.identity);
+                    GameManager.Spawn(colorMaping.prefab, position, Quaternion.identity);
             }
         }
     }

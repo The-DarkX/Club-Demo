@@ -27,17 +27,19 @@ public class CameraController : MonoBehaviour
 
     Vector3 zoomAmount;
 
-    void Start()
-    {
-        targetTransform = FindObjectOfType<PlayerController>().GetComponent<Transform>();
+    Vector2 scrollDelta;
 
-        zoomAmount = new Vector3(0, zoomStep, -zoomStep);
+	void Start()
+    {
+        targetTransform = FindObjectOfType<PlayerController>().GetComponent<Transform>(); //Find Target
+
+        zoomAmount = new Vector3(0, zoomStep, -zoomStep); //Initial zoom
 
         newPosition = transform.position;
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
 
-        if (hideCursor)
+        if (hideCursor) // Lock and hide cursor
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
@@ -46,22 +48,25 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        scrollDelta = InputManager.scrollDelta;
+
         HandleMouseInput();
         HandleMovementInput();
     }
 
     void HandleMouseInput()
     {
-        if (Input.mouseScrollDelta.y != 0)
+        if (scrollDelta.y != 0)
         {
-            newZoom -= Input.mouseScrollDelta.y * zoomAmount;
+            newZoom -= scrollDelta.y * zoomAmount;
         }
 
-        if (Input.GetMouseButtonDown(2))
+        /*
+        if (Input.GetMouseButtonDown(1))
         {
             rotateStartPosition = Input.mousePosition;
         }
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(1))
         {
             rotateCurrentPosition = Input.mousePosition;
 
@@ -70,19 +75,21 @@ public class CameraController : MonoBehaviour
             rotateStartPosition = rotateCurrentPosition;
 
             newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / 5f));
-        }
+        }*/
     }
 
     void HandleMovementInput()
     {
         newPosition = targetTransform.position;
-        newZoom.y = Mathf.Clamp(newZoom.y, minZoom, maxZoom);
-        newZoom.z = -Mathf.Clamp(newZoom.z, minZoom, maxZoom);
+        newZoom.y = Mathf.Clamp(newZoom.y, minZoom, maxZoom); //Clamp y zoom
+        newZoom.z = -Mathf.Clamp(newZoom.z, minZoom, maxZoom); //Clamp x zoom
 
-        transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
-        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
+        transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime); //Smooth Movement
+        
+        //transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime); //Smooth rotation
+        
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime); //Smooth zoom
 
-        cameraTransform.LookAt(transform.position);
+        cameraTransform.LookAt(transform.position); //Looking at player
     }
 }
