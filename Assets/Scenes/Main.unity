@@ -455,6 +455,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7416484721836087391, guid: 27eae68c7684e73448ff8c2f5e2b7e5b, type: 3}
+      propertyPath: minZoom
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27eae68c7684e73448ff8c2f5e2b7e5b, type: 3}
 --- !u!1001 &7984718311699558227
@@ -555,7 +559,7 @@ PrefabInstance:
     - target: {fileID: 7984718310485953965, guid: 8ac0ad3491e07cf4bbd2cb669215c804, type: 3}
       propertyPath: colorMappings.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 4812773974767392436, guid: b5c4740a46e17b243af38828302103ba, type: 3}
+      objectReference: {fileID: 1014849163954190009, guid: b5c4740a46e17b243af38828302103ba, type: 3}
     - target: {fileID: 7984718310485953965, guid: 8ac0ad3491e07cf4bbd2cb669215c804, type: 3}
       propertyPath: colorMappings.Array.data[1].color.g
       value: 1

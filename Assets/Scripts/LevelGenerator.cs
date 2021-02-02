@@ -74,8 +74,8 @@ public class LevelGenerator : MonoBehaviour
         float height = Mathf.Abs(objectPositions[0].z - objectPositions[objectPositions.Count - 1].z);
 		int a = objectPositions.Count / 2;
 
-		Vector3 centerPos = new Vector3(objectPositions[a].x, 0, objectPositions[a].z);
         Vector3 planeScale = new Vector3(width + 1f, 0.1f, height + 1f);
+        Vector3 centerPos = new Vector3(objectPositions[a].x, -planeScale.y / 2, objectPositions[a].z);
 
         GameObject ground = Instantiate(groundPlane, centerPos, Quaternion.identity, transform);
 

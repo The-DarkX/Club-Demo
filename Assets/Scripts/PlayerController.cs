@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-	//public float movementDelay = 1;
+	public float moveSpeed = 0.25f;
 
 	public LayerMask wallLayer;
+	public LayerMask crateLayer;
 
 	bool isAxisInUse = false;
-
+	
 	Vector3 movement;
-	Vector3 forwardDirection;
+
+	Vector3 startPos;
+	Vector3 targetPos;
+
+	bool canMove;
+
+	Transform crate;
 
 	private void FixedUpdate()
 	{
@@ -23,19 +30,65 @@ public class PlayerController : MonoBehaviour
 		//Inputs
 		Vector2 movementAxis = InputManager.playerMovement;
 		movement = new Vector3(Mathf.RoundToInt(movementAxis.x), 0, Mathf.RoundToInt(movementAxis.y));
-		forwardDirection = transform.position + movement;
+
+		if (canMove)
+		{
+			if (crate != null)
+			{
+				if (targetPos == crate.position)
+				{
+					crate.parent = transform;
+				}
+
+				if (Physics.Raycast(crate.position, movement, 0.5f, wallLayer))
+				{
+					canMove = false;
+					transform.position = startPos;
+					crate.parent = null;
+					return;
+				}
+			}
+
+			if (Vector3.Distance(startPos, transform.position) > 1f)
+			{
+				transform.position = targetPos;
+				canMove = false;
+
+				if (crate != null)
+					crate.parent = null;
+
+				return;
+			}
+
+			transform.position += (targetPos - startPos) * moveSpeed * Time.deltaTime;
+
+			return;
+		}
+
+		RaycastHit hit;
+		if (Physics.Raycast(transform.position, movement, out hit, 1, crateLayer))
+		{
+			crate = hit.transform;
+		}
+		else 
+		{
+			crate = null;
+		}
 
 		if (movement.x != 0 || movement.z != 0) //Button Pressed
 		{
 			if (isAxisInUse == false)
 			{
-				//Ignor if moving toward a wall
+				//Ignore if moving toward a wall
 				if (Physics.Raycast(transform.position, movement, 1, wallLayer)) return;
 
-				transform.LookAt(forwardDirection);
+				targetPos = transform.position + movement;
+				startPos = transform.position;
 
 				//Move
-				transform.position += movement;
+				canMove = true;
+
+				transform.LookAt(targetPos);
 
 				isAxisInUse = true;
 			}
@@ -44,12 +97,5 @@ public class PlayerController : MonoBehaviour
 		{
 			isAxisInUse = false;
 		}
-	}
-
-	private void OnDrawGizmos()
-	{
-		//Forward Direction representation
-		Gizmos.color = Color.green;
-		Gizmos.DrawLine(transform.position, forwardDirection);
 	}
 }
