@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 
 	public LayerMask wallLayer;
 	public LayerMask crateLayer;
+	public LayerMask core;
 
 	bool isAxisInUse = false;
 	
@@ -20,9 +21,30 @@ public class PlayerController : MonoBehaviour
 
 	Transform crate;
 
+	GameManager gameManager;
+
+	private void Start()
+	{
+		gameManager = FindObjectOfType<GameManager>();
+	}
+
 	private void FixedUpdate()
 	{
 		Movement();
+
+		RaycastHit hit;
+		if (Physics.Raycast(transform.position, movement, out hit, 1, core)) 
+		{
+			if (hit.transform.CompareTag("Start"))
+			{
+				gameManager.StartTimer();
+			}
+			else if (hit.transform.CompareTag("Finish")) 
+			{
+				gameManager.EndTimer();
+				canMove = false;
+			}
+		}
 	}
 
 	void Movement()
@@ -77,6 +99,8 @@ public class PlayerController : MonoBehaviour
 
 		if (movement.x != 0 || movement.z != 0) //Button Pressed
 		{
+			if (Mathf.Abs(movement.x) == 1 && Mathf.Abs(movement.z) == 1) return; //Cancel diagonal movement
+
 			if (isAxisInUse == false)
 			{
 				//Ignore if moving toward a wall

@@ -53,6 +53,9 @@ MonoBehaviour:
   crateLayer:
     serializedVersion: 2
     m_Bits: 512
+  core:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &2020904649970965429
 GameObject:
   m_ObjectHideFlags: 0
