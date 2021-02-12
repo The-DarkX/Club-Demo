@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 
 	public LayerMask wallLayer;
 	public LayerMask crateLayer;
-	public LayerMask core;
+	public LayerMask obstacleLayer;
 
 	bool isAxisInUse = false;
 	
@@ -21,30 +21,16 @@ public class PlayerController : MonoBehaviour
 
 	Transform crate;
 
-	GameManager gameManager;
+	CrateCollector[] collectors;
 
 	private void Start()
 	{
-		gameManager = FindObjectOfType<GameManager>();
+		collectors = FindObjectsOfType<CrateCollector>();
 	}
 
 	private void FixedUpdate()
 	{
 		Movement();
-
-		RaycastHit hit;
-		if (Physics.Raycast(transform.position, movement, out hit, 1, core)) 
-		{
-			if (hit.transform.CompareTag("Start"))
-			{
-				gameManager.StartTimer();
-			}
-			else if (hit.transform.CompareTag("Finish")) 
-			{
-				gameManager.EndTimer();
-				canMove = false;
-			}
-		}
 	}
 
 	void Movement()
@@ -60,9 +46,19 @@ public class PlayerController : MonoBehaviour
 				if (targetPos == crate.position)
 				{
 					crate.parent = transform;
+
+					foreach (CrateCollector collector in collectors)
+					{
+						if (targetPos + movement == collector.gameObject.transform.position) 
+						{
+							Destroy(crate.gameObject);
+							print("destroyed");
+							break;
+						}
+					}
 				}
 
-				if (Physics.Raycast(crate.position, movement, 0.5f, wallLayer))
+				if (Physics.Raycast(crate.position, movement, 0.5f, obstacleLayer))
 				{
 					canMove = false;
 					transform.position = startPos;

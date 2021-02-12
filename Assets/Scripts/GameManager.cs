@@ -5,41 +5,62 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using System.Linq;
 
 [DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
-	public TMP_Text timerText;
-	public float timeRemaining = 10;
+	public GameObject timeOutUI;
+	public GameObject winUI;
 
 	public bool isTimerRunning = false;
 
+	List<CrateID> crates = new List<CrateID>();
+
+	private void Start()
+	{
+		timeOutUI.gameObject.SetActive(false);
+		winUI.gameObject.SetActive(false);
+		
+		crates.AddRange(FindObjectsOfType<CrateID>().ToList());
+	}
+
 	private void Update()
 	{
-		if (isTimerRunning) 
+		print(crates.Count);
+
+		for (int i = 0; i < crates.Count; i++) 
 		{
-			if (timeRemaining > 0)
+			if (crates[i] == null) 
 			{
-				timeRemaining -= Time.deltaTime;
+				crates.RemoveAt(i);
 			}
-			else 
-			{
-				LoseSequence();
+		}
 
-				timeRemaining = 0;
-				isTimerRunning = false;
-			}
-
-			DisplayTime(timeRemaining);
+		if (crates.Count == 0) 
+		{
+			WinSequence();
 		}
 	}
 
-	void DisplayTime(float timeToDisplay) 
+	public void BeginGame() 
 	{
-		float minutes = Mathf.FloorToInt(timeToDisplay / 60);
-		float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+		isTimerRunning = true;
+		FindObjectOfType<PlayerController>().enabled = true;
+	}
 
-		timerText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+	public void WinSequence() 
+	{
+		Time.timeScale = 0;
+
+		winUI.gameObject.SetActive(true);
+	}
+
+	public void LoseSequence() 
+	{
+		Time.timeScale = 0;
+
+		timeOutUI.gameObject.SetActive(true);
 	}
 
 	#region Spawner
@@ -53,7 +74,7 @@ public class GameManager : MonoBehaviour
 		Instantiate(prefab, position, rotation);
 	}
 
-	public static void Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent) 
+	public static void Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
 	{
 		Instantiate(prefab, position, rotation, parent);
 	}
@@ -65,37 +86,16 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
-	public static void LoadNext() 
+	public static void LoadNext()
 	{
 		if (SceneManager.sceneCount < SceneManager.GetActiveScene().buildIndex)
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 
-	public static void LoadPrevious() 
+	public static void LoadPrevious()
 	{
 		if (SceneManager.sceneCount > 0)
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
 	}
 	#endregion
-
-	public void StartTimer() 
-	{
-		isTimerRunning = true;
-	}
-
-	public void EndTimer() 
-	{
-		isTimerRunning = false;
-		WinSequence();
-	}
-
-	void WinSequence() 
-	{
-		print("You Won!");
-	}
-
-	void LoseSequence() 
-	{
-		print("Time Ran Out!");
-	}
 }

@@ -85,7 +85,6 @@ public class LevelGenerator : MonoBehaviour
         {
             if (colorMaping.color.Equals(pixelColor))
             {
-                print("color equal");
                 Vector3 position = new Vector3(x, 0.5f, z);
 
                 if (colorMaping.prefab.layer == LayerMask.NameToLayer("Wall"))
