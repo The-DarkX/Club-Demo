@@ -27,8 +27,6 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
 	{
-		print(crates.Count);
-
 		for (int i = 0; i < crates.Count; i++) 
 		{
 			if (crates[i] == null) 
